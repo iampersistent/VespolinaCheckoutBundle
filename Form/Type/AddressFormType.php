@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-class AddressType extends AbstractType
+class AddressFormType extends AbstractType
 {
     /**
      * {@inheritdoc}
