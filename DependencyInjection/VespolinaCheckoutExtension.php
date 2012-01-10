@@ -24,6 +24,7 @@ class VespolinaCheckoutExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $loader->load(sprintf('checkout.xml'));
+        $loader->load(sprintf('form.xml'));
 
         if (isset($config['address'])) {
             $this->configureAddress($config['address'], $container);

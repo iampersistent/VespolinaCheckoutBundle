@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="vespolina.address.form.name">vespolina_address</parameter>
+        <parameter key="vespolina.address.form.type.class">Vespolina\CheckoutBundle\Form\Type\AddressFormType</parameter>
+        <parameter key="vespolina.address.form.model.data_class.class">Vespolina\ProductBundle\Document\Address</parameter>
+
+        <parameter key="vespolina.secure.form.name">vespolina_secure</parameter>
+        <parameter key="vespolina.secure.form.type.class">Vespolina\CheckoutBundle\Form\Type\SecureFormType</parameter>
+        <parameter key="vespolina.secure.form.model.data_class.class">Vespolina\ProductBundle\Document\Secure</parameter>
+
+        <parameter key="vespolina.state.form.name">vespolina_state</parameter>
+        <parameter key="vespolina.state.form.type.class">Vespolina\CheckoutBundle\Form\Type\StateFormType</parameter>
+    </parameters>
+    <services>
+        <service id="vespolina.secure.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument type="service" id="vespolina.secure.form.type" />
+            <argument>%vespolina.secure.form.name%</argument>
+        </service>
+        <service id="vespolina.address.form.type" class="%vespolina.address.form.type.class%">
+            <tag name="form.type" alias="%vespolina.address.form.name%" />
+            <argument key="data_class">%vespolina.address.form.model.data_class.class%</argument>
+            <argument key="name">%vespolina.address.form.name%</argument>
+        </service>
+        <service id="vespolina.secure.form.type" class="%vespolina.secure.form.type.class%">
+            <tag name="form.type" alias="%vespolina.secure.form.name%" />
+            <argument key="data_class">%vespolina.secure.form.model.data_class.class%</argument>
+            <argument key="name">%vespolina.secure.form.name%</argument>
+        </service>
+        <service id="vespolina.state.form.type" class="%vespolina.state.form.type.class%">
+            <tag name="form.type" alias="%vespolina.state.form.name%" />
+            <argument key="name">%vespolina.state.form.name%</argument>
+        </service>
+    </services>
+</container>

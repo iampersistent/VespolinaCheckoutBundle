@@ -6,21 +6,8 @@
 
     <parameters>
         <parameter key="vespolina.checkout.template_engine">twig</parameter>
-
-        <parameter key="vespolina.address.form.name">vespolina_address</parameter>
-        <parameter key="vespolina.address.form.type.class">Vespolina\CheckoutBundle\Form\Type\AddressFormType</parameter>
-        <parameter key="vespolina.address.form.model.data_class.class">Vespolina\ProductBundle\Document\Address</parameter>
     </parameters>
     <services>
-        <service id="vespolina.address.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
-            <argument type="service" id="vespolina.address.form.type" />
-            <argument>%vespolina.address.form.name%</argument>
-        </service>
-        <service id="vespolina.address.form.type" class="%vespolina.address.form.type.class%">
-            <tag name="form.type" alias="%vespolina.address.form.name%" />
-            <argument key="data_class">%vespolina.address.form.model.data_class.class%</argument>
-            <argument key="name">%vespolina.address.form.name%</argument>
-        </service>
         <service id="vespolina.checkout_cart_manager" alias="vespolina.cart.cart_manager" />
     </services>
 </container>
