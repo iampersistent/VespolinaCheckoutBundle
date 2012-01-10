@@ -16,12 +16,22 @@ class CreditCardFormType extends AbstractType
         $builder
             ->add('cardNumber', 'text', array(
                 'required' => true,
+                'label' => 'Card Number',
+                'attr' => array(
+                    'size' => '24',
+                    'maxlength' => '24'
+                ),
             ))
             ->add('expiration', new CreditCardDateFormType(), array(
                 'required' => true,
+                'label' => 'Expiration Date',
             ))
             ->add('cvv', 'text', array(
                 'required' => true,
+                'label' => 'CVV',
+                'attr' => array(
+                    'size' => '5',
+                ),
             ))
         ;
     }

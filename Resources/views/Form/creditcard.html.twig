@@ -6,16 +6,16 @@
 {% endspaceless %}
 {% endblock vespolina_creditcard_widget %}
 
-{% block vespolina_creditcard_number_row %}
+{% block vespolina_creditcard_number_widget %}
 {% spaceless %}
-Card Number <input type="text" size="24" maxlength="20" name="" id="" />
+{{ form_row(form) }}
 Card Type V MC AM
 {% endspaceless %}
-{% endblock vespolina_creditcard_number_row %}
+{% endblock vespolina_creditcard_number_widget %}
 
 
-{% block vespolina_creditcard_date_row %}
+{% block vespolina_creditcard_date_widget %}
 {% spaceless %}
-Expiration Date {{ form_widget(form.children.month) }}/{{ form_widget(form.children.year) }}
+{{ form_widget(form.children.month) }}/{{ form_widget(form.children.year) }}
 {% endspaceless %}
-{% endblock vespolina_creditcard_date_row %}
+{% endblock vespolina_creditcard_date_widget %}
