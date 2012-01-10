@@ -26,6 +26,9 @@ class SecureFormType extends AbstractType
             ->add('address', 'vespolina_address', array(
                 'required' => true,
             ))
+            ->add('creditCard', 'vespolina_creditcard', array(
+                'required' => true,
+            ))
         ;
     }
 

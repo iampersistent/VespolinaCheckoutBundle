@@ -14,7 +14,7 @@ class CreditCardFormType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('cardName', 'text', array(
+            ->add('cardNumber', 'text', array(
                 'required' => true,
             ))
             ->add('expiration', new CreditCardDateFormType(), array(
