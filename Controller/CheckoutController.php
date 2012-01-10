@@ -23,9 +23,21 @@ class CheckoutController extends ContainerAware
         ));
     }
 
-    public function paymentAction($id)
+    public function paymentAction($id, $provider)
     {
+        $cart = $this->container->get('vespolina.checkout_cart_manager')->findCartById($id);
 
+        $form = $this->container->get('vespolina.secure.form');
+
+        return $this->container->get('templating')->renderResponse('VespolinaCheckoutBundle:Checkout:'.$provider.'_payment.html.'.$this->getEngine(), array(
+            'cart' => $cart,
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function processAction($id, $provider)
+    {
+        $cart = $this->container->get('vespolina.checkout_cart_manager')->findCartById($id);
     }
 
     public function successAction($id)
@@ -35,6 +47,6 @@ class CheckoutController extends ContainerAware
 
     protected function getEngine()
     {
-        return $this->container->getParameter('vespolina_checkout.template.engine');
+        return $this->container->getParameter('vespolina.checkout.template_engine');
     }
 }
