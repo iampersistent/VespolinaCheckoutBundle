@@ -32,12 +32,14 @@ class CheckoutController extends ContainerAware
         return $this->container->get('templating')->renderResponse('VespolinaCheckoutBundle:Checkout:'.$provider.'_payment.html.'.$this->getEngine(), array(
             'cart' => $cart,
             'form' => $form->createView(),
+            'provider' => $provider,
         ));
     }
 
     public function processAction($id, $provider)
     {
         $cart = $this->container->get('vespolina.checkout_cart_manager')->findCartById($id);
+
     }
 
     public function successAction($id)
