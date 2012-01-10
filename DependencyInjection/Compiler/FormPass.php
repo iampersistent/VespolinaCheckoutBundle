@@ -24,6 +24,7 @@ class FormPass implements CompilerPassInterface
         $resources = $container->getParameter('twig.form.resources');
 
         $resources[] = 'VespolinaCheckoutBundle:Form:address.html.twig';
+        $resources[] = 'VespolinaCheckoutBundle:Form:creditcard.html.twig';
 
         $container->setParameter('twig.form.resources', $resources);
     }

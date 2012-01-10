@@ -1,0 +1,22 @@
+{% block vespolina_creditcard_widget %}
+{% spaceless %}
+{{ form_row(form.cardNumber) }}
+{{ form_row(form.expiration) }}
+{{ form_row(form.cvv) }}
+
+{% endspaceless %}
+{% endblock vespolina_creditcard_widget %}
+
+{% block vespolina_creditcard_number_row %}
+{% spaceless %}
+Card Number <input type="text" size="24" maxlength="20" name="" id="" />
+Card Type
+{% endspaceless %}
+{% endblock vespolina_creditcard_number_row %}
+
+
+{% block vespolina_creditcard_date_row %}
+{% spaceless %}
+Expiration Date <select>{% for m in range(1, 12) %}<option>{{ "%02d"|fomat(m) }}</option>{% endfor %}</select>/<select>{% for y in sYear .. eYear %}<option>{{ "%02d"|fomat(y) }}</option>{% endfor %}</select>
+{% endspaceless %}
+{% endblock vespolina_creditcard_number %}
