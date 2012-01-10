@@ -9,6 +9,8 @@ namespace Vespolina\CheckoutBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -16,10 +18,12 @@ use Symfony\Component\Form\FormBuilder;
 class AddressFormType extends AbstractType
 {
     protected $dataClass;
+    protected $name;
 
-    public function __construct($dataClass)
+    public function __construct($dataClass, $name)
     {
         $this->dataClass = $dataClass;
+        $this->name = $name;
     }
 
     /**
@@ -28,19 +32,19 @@ class AddressFormType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('street1', 'textarea', array(
+            ->add('street1', 'text', array(
                 'required' => true,
             ))
-            ->add('street2', 'textarea', array(
+            ->add('street2', 'text', array(
                 'required' => false,
             ))
-            ->add('city', 'textarea', array(
+            ->add('city', 'text', array(
                 'required' => true,
             ))
-            ->add('country', 'country', array(
+            ->add('state', 'vespolina_state', array(
                 'required' => true,
             ))
-            ->add('postalCode', 'textarea', array(
+            ->add('postalCode', 'text', array(
                 'required' => true,
             ))
         ;
