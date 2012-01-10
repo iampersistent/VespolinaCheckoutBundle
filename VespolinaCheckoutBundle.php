@@ -11,8 +11,15 @@ namespace Vespolina\CheckoutBundle;
  * @author Richard Shank <develop@zestic.com>
  */
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+use Vespolina\CheckoutBundle\DependencyInjection\Compiler\FormPass;
 
 class VespolinaCheckoutBundle extends Bundle
 {
-
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+        $container->addCompilerPass(new FormPass());
+    }
 }

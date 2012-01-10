@@ -1,0 +1,10 @@
+{% block vespolina_address %}
+{% spaceless %}
+{{ form_row(form.children.street1) }}
+{{ form_row(form.children.street2) }}
+{{ form_row(form.children.city) }}
+{{ form_row(form.children.state) }}
+{{ form_row(form.children.country) }}
+{{ form_row(form.children.postalCode) }}
+{% endspaceless %}
+{% endblock vespolina_address %}

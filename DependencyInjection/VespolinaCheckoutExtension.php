@@ -24,5 +24,25 @@ class VespolinaCheckoutExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $loader->load(sprintf('checkout.xml'));
+
+        if (isset($config['address'])) {
+            $this->configureAddress($config['address'], $container);
+        }
+    }
+
+    protected function configureAddress(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['form'])) {
+            $formConfig = $config['form'];
+            if (isset($formConfig['type'])) {
+                $container->setParameter('vespolina.address.form.type.class', $formConfig['type']);
+            }
+            if (isset($formConfig['name'])) {
+                $container->setParameter('vespolina_address', $formConfig['name']);
+            }
+            if (isset($formConfig['data_class'])) {
+                $container->setParameter('vespolina.address.form.model.data_class.class', $formConfig['data_class']);
+            }
+        }
     }
 }

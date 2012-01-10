@@ -1,13 +1,27 @@
 <?php
+/**
+ * (c) 2012 Vespolina Project http://www.vespolina-project.org
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 namespace Vespolina\CheckoutBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
 
+/**
+ * @author Richard Shank <develop@zestic.com>
+ */
 class AddressFormType extends AbstractType
 {
+    protected $dataClass;
+
+    public function __construct($dataClass)
+    {
+        $this->dataClass = $dataClass;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -23,9 +37,6 @@ class AddressFormType extends AbstractType
             ->add('city', 'textarea', array(
                 'required' => true,
             ))
-            ->add('state', 'vespolina_state', array(
-                'required' => true,
-            ))
             ->add('country', 'country', array(
                 'required' => true,
             ))
@@ -33,6 +44,13 @@ class AddressFormType extends AbstractType
                 'required' => true,
             ))
         ;
+    }
+
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'data_class' => $this->dataClass,
+        );
     }
 
     /**
