@@ -1,0 +1,29 @@
+{
+    "name": "vespolina/checkout-bundle",
+    "type": "symfony-bundle",
+    "description": "Vespolina Checkout bundle. Checkout management and more.",
+    "keywords": ["shop", "ecommerce", "checkout", "item"],
+    "homepage": "http://vespolina-project.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vespolina Team",
+            "homepage": "https://github.com/vespolina/VespolinaCheckoutBundle/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "2.*",
+        "symfony/security-bundle": "2.*"
+    },
+    "suggest": {
+        "symfony/doctrine-bundle": "*",
+        "symfony/mongodb-odm-bundle": "*",
+        "doctrine/couchdb-odm-bundle": "*"
+    },
+    "autoload": {
+        "psr-0": { "Vespolina\\CheckoutBundle": "" }
+    },
+    "target-dir": "Vespolina/CheckoutBundle"
+}
+
