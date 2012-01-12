@@ -9,5 +9,8 @@
     </parameters>
     <services>
         <service id="vespolina.checkout_cart_manager" alias="vespolina.cart.cart_manager" />
+        <service id="vespolina.direct_payment.processing" alias="payment.plugin.paypal_direct_payment" />
+        <service id="vespolina.secure.processing" alias="payment.plugin.paypal_direct_payment" />
+        <service id="vespolina.paypal.processing" alias="payment.plugin.paypal_express_checkout" />
     </services>
 </container>

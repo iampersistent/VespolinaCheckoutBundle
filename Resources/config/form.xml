@@ -7,15 +7,17 @@
     <parameters>
         <parameter key="vespolina.address.form.name">vespolina_address</parameter>
         <parameter key="vespolina.address.form.type.class">Vespolina\CheckoutBundle\Form\Type\AddressFormType</parameter>
-        <parameter key="vespolina.address.form.model.data_class.class">Vespolina\CheckouttBundle\Document\Address</parameter>
+        <parameter key="vespolina.address.form.model.data_class.class">Vespolina\CheckoutBundle\Document\Address</parameter>
 
         <parameter key="vespolina.creditcard.form.name">vespolina_creditcard</parameter>
         <parameter key="vespolina.creditcard.form.type.class">Vespolina\CheckoutBundle\Form\Type\CreditCardFormType</parameter>
-        <parameter key="vespolina.creditcard.form.model.data_class.class">Vespolina\CheckouttBundle\Document\CreditCard</parameter>
+        <parameter key="vespolina.creditcard.form.model.data_class.class">Vespolina\CheckoutBundle\Document\CreditCard</parameter>
 
         <parameter key="vespolina.secure.form.name">vespolina_secure</parameter>
-        <parameter key="vespolina.secure.form.type.class">Vespolina\CheckoutBundle\Form\Type\SecureFormType</parameter>
-        <parameter key="vespolina.secure.form.model.data_class.class">Vespolina\CheckouttBundle\Document\Secure</parameter>
+        <parameter key="vespolina.secure.form.type.class">Vespolina\CheckoutBundle\Form\Type\DirectPaymentFormType</parameter>
+        <parameter key="vespolina.secure.form.model.data_class.class">Vespolina\CheckoutBundle\Document\DirectPayment</parameter>
+
+        <parameter key="vespolina.secure.form.handler.class">Vespolina\CheckoutBundle\Form\Handler\DirectPaymentFormHandler</parameter>
 
         <parameter key="vespolina.state.form.name">vespolina_state</parameter>
         <parameter key="vespolina.state.form.type.class">Vespolina\CheckoutBundle\Form\Type\StateFormType</parameter>
@@ -39,6 +41,10 @@
             <tag name="form.type" alias="%vespolina.secure.form.name%" />
             <argument key="data_class">%vespolina.secure.form.model.data_class.class%</argument>
             <argument key="name">%vespolina.secure.form.name%</argument>
+        </service>
+        <service id="vespolina.secure.form.handler" class="%vespolina.secure.form.handler.class%" scope="request">
+            <argument type="service" id="vespolina.secure.form" />
+            <argument type="service" id="request" />
         </service>
         <service id="vespolina.state.form.type" class="%vespolina.state.form.type.class%">
             <tag name="form.type" alias="%vespolina.state.form.name%" />

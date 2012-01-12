@@ -57,10 +57,11 @@ class CreditCardDateFormType extends AbstractType
         // todo: make configurable for range and format
         $startingYear = (integer)date('y');
         $endingYear = $startingYear + 25;
+        $key = (integer)date('Y');
         $years = array();
         for ($y = (string)$startingYear ; $y <= (string)$endingYear ; $y++) {
-            $y = $y;
-            $years[$y] = $y;
+            $years[$key] = $y;
+            $key++;
         }
         return $years;
     }

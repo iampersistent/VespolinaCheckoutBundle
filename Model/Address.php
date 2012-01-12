@@ -34,6 +34,11 @@ class Address
         return $this->street2;
     }
 
+    public function getStreet()
+    {
+        return $this->street1.' '.$this->street2;
+    }
+
     public function getCity()
     {
         return $this->city;

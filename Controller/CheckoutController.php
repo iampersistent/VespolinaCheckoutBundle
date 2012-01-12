@@ -7,6 +7,12 @@
  */
 namespace Vespolina\CheckoutBundle\Controller;
 
+use JMS\Payment\CoreBundle\Plugin\Exception\ActionRequiredException;
+use JMS\Payment\CoreBundle\Entity\FinancialTransaction;
+use JMS\Payment\CoreBundle\Entity\Payment;
+use JMS\Payment\CoreBundle\Entity\ExtendedData;
+use JMS\Payment\CoreBundle\Entity\PaymentInstruction;
+
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
@@ -36,9 +42,48 @@ class CheckoutController extends ContainerAware
         ));
     }
 
-    public function processAction($id, $provider)
+    public function processAction($id, $provider, $paymentId = null)
     {
+        static $cartItems;
+
+        $processor = $this->container->get('vespolina.'.$provider.'.processing');
+        $formHandler = $this->container->get('vespolina.'.$provider.'.form.handler');
+
         $cart = $this->container->get('vespolina.checkout_cart_manager')->findCartById($id);
+        $cartItems = $cart->getItems();
+
+        if (null === $paymentId) {
+
+            // recurring must happen separately
+            foreach ($cartItems as $cartItem) {
+                if ($cartItem->isSubscription()) {
+                    $recur = $cartItem->getRecur();
+                    // todo: Payment Core Recurring Profile
+                    $data['PROFILESTARTDATE'] = date('Y-m-d');
+                    $data['BILLINGPERIOD'] = $recur->getBillingPeriod();
+                    $data['BILLINGFREQUENCY'] = $recur->getBillingFrequency();
+
+                    $response = $processor->CreateRecurringPaymentsProfile();
+                    // remove each successful item from working cart
+$a = 0;
+                }
+            }
+
+            if ($data = $formHandler->process('vespolina_'.$provider)) {
+                // recurring -
+
+                $transaction = $this->prepTransaction($cart->getTotal(), $data);
+                $processor->setIPAddress($this->container->get('request')->getClientIp());
+                $processor->setIPAddress('71.59.151.161');
+                $processor->approveAndDeposit($transaction, true);
+                // success
+
+                // upgrade or new?
+
+
+            }
+        }
+        // failure
 
     }
 
@@ -50,5 +95,17 @@ class CheckoutController extends ContainerAware
     protected function getEngine()
     {
         return $this->container->getParameter('vespolina.checkout.template_engine');
+    }
+
+    protected function prepTransaction($amount, $data)
+    {
+        // todo: this should be in a service
+        $paymentInstruction = new PaymentInstruction($amount, 'USD', 'paypal_direct_payment', $data);
+        $payment = new Payment($paymentInstruction, $amount);
+        $transaction = new FinancialTransaction();
+        $transaction->setRequestedAmount($amount);
+        $payment->addTransaction($transaction);
+
+        return $transaction;
     }
 }
