@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) 2011 - 2012 Vespolina Project http://www.vespolina-project.org
+ * (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -52,36 +52,56 @@ class CheckoutController extends ContainerAware
         $cart = $this->container->get('vespolina.checkout_cart_manager')->findCartById($id);
         $cartItems = $cart->getItems();
 
+        $cart->getTotal();
         if (null === $paymentId) {
 
-            // recurring must happen separately
-            foreach ($cartItems as $cartItem) {
-                if ($cartItem->isSubscription()) {
-                    $recur = $cartItem->getRecur();
-                    // todo: Payment Core Recurring Profile
-                    $data['PROFILESTARTDATE'] = date('Y-m-d');
-                    $data['BILLINGPERIOD'] = $recur->getBillingPeriod();
-                    $data['BILLINGFREQUENCY'] = $recur->getBillingFrequency();
+            if ($extendedData = $formHandler->process('vespolina_'.$provider)) {
+                // recurring must happen separately
+                foreach ($cartItems as $cartItem) {
+                    if ($cartItem->isRecurring()) {
+                        $cartableItem = $cartItem->getCartableItem();
+                        $options = $cartItem->getOptions();
+                        $key = key($options);
+                        $options = $options[$key];
+                        $recur = $cartableItem->getOptionSet($options)->getRecur();
+                        // todo: Payment Core Recurring Profile
+                        $data['PROFILESTARTDATE'] = date('Y-m-d').'T00:00:00Z';
+                        $data['BILLINGPERIOD'] = $recur->getBillingPeriod();
+                        $data['BILLINGFREQUENCY'] = $recur->getBillingFrequency();
+                        $data['AMT'] = $recur->getPrice();
+                        $data['DESC'] = $recur->getPrice();
 
-                    $response = $processor->CreateRecurringPaymentsProfile();
-                    // remove each successful item from working cart
-$a = 0;
+                        try {
+                            $response = $processor->requestCreateRecurringPaymentsProfile(array_merge($extendedData->get('checkout_params'), $data));
+                            $cart->removeItem($cartItem);
+                        } catch (\Exception $e) {
+                            //deal with it
+                        }
+                        // remove each successful item from working cart
+                        // todo: put this into fulfillment at some point
+                        $plan = $this->dm->getRepository('Model:Plan')->find($options->getPlan());
+                        $constraints = $plan->getConstraints();
+
+
+
+                    }
                 }
-            }
 
-            if ($data = $formHandler->process('vespolina_'.$provider)) {
-                // recurring -
+                // process rest of cart
 
-                $transaction = $this->prepTransaction($cart->getTotal(), $data);
+                $transaction = $this->prepTransaction($cart->getTotal(), $extendedData);
                 $processor->setIPAddress($this->container->get('request')->getClientIp());
                 $processor->setIPAddress('71.59.151.161');
-                $processor->approveAndDeposit($transaction, true);
+                try {
+                    $processor->approveAndDeposit($transaction, true);
+                } catch (\Exception $e) {
+
+                }
                 // success
 
                 // upgrade or new?
-
-
             }
+
         }
         // failure
 
@@ -89,7 +109,10 @@ $a = 0;
 
     public function successAction($id)
     {
-
+        $cart = $this->container->get('vespolina.checkout_cart_manager')->findCartById($id);
+        return $this->container->get('templating')->renderResponse('VespolinaCheckoutBundle:Checkout:success.html.'.$this->getEngine(), array(
+            'cart' => $cart,
+        ));
     }
 
     protected function getEngine()

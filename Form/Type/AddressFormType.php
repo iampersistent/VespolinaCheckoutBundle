@@ -34,18 +34,35 @@ class AddressFormType extends AbstractType
         $builder
             ->add('street1', 'text', array(
                 'required' => true,
+                'attr' => array(
+                    'size' => '40',
+                ),
             ))
             ->add('street2', 'text', array(
                 'required' => false,
+                'attr' => array(
+                    'size' => '40',
+                ),
             ))
             ->add('city', 'text', array(
                 'required' => true,
+                'attr' => array(
+                    'size' => '20',
+                ),
             ))
             ->add('state', 'vespolina_state', array(
+                'required' => false,
+            ))
+            ->add('country', 'country', array(
                 'required' => true,
+                'preferred_choices' => array('US'),
             ))
             ->add('postalCode', 'text', array(
                 'required' => true,
+                'label' => 'Zipcode',
+                'attr' => array(
+                    'size' => '12',
+                ),
             ))
         ;
     }

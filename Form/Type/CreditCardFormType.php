@@ -27,10 +27,10 @@ class CreditCardFormType extends AbstractType
                 'label' => 'Expiration Date',
             ))
             ->add('cvv', 'text', array(
-                'required' => true,
+                'required' => false,
                 'label' => 'CVV',
                 'attr' => array(
-                    'size' => '5',
+                    'size' => '4',
                 ),
             ))
         ;

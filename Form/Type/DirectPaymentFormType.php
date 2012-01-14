@@ -16,12 +16,24 @@ class DirectPaymentFormType extends AbstractType
         $builder
             ->add('firstName', 'text', array(
                 'required' => true,
+                'label' => 'First Name',
+                'attr' => array(
+                    'size' => '16',
+                ),
             ))
             ->add('middle', 'text', array(
-                'required' => true,
+                'required' => false,
+                'label' => 'MI',
+                'attr' => array(
+                    'size' => '3',
+                ),
             ))
             ->add('lastName', 'text', array(
                 'required' => true,
+                'label' => 'Last Name',
+                'attr' => array(
+                    'size' => '16',
+                ),
             ))
             ->add('address', 'vespolina_address', array(
                 'required' => true,
