@@ -44,6 +44,13 @@ class DirectPaymentFormType extends AbstractType
         ;
     }
 
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'data_class' => 'Vespolina\CheckoutBundle\Document\DirectPayment',
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
