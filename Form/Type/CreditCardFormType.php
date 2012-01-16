@@ -19,7 +19,9 @@ class CreditCardFormType extends AbstractType
                 'label' => 'Card Number',
                 'attr' => array(
                     'size' => '24',
-                    'maxlength' => '24'
+                    'maxlength' => '24',
+                    'onblur' => "cc=this.value;this.value=this.value.replace(/[^\d]/g, '');",
+                    'onfocus' => "if(this.value!=cc)this.value=cc;",
                 ),
             ))
             ->add('expiration', new CreditCardDateFormType(), array(
