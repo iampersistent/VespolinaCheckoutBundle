@@ -57,7 +57,7 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function addCreditCardection(ArrayNodeDefinition $node)
+    private function addCreditCardSection(ArrayNodeDefinition $node)
     {
         $node
             ->children()
