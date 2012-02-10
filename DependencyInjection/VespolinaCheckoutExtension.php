@@ -29,6 +29,10 @@ class VespolinaCheckoutExtension extends Extension
         if (isset($config['address'])) {
             $this->configureAddress($config['address'], $container);
         }
+
+        if (isset($config['credit_card'])) {
+            $this->configureCreditCard($config['credit_card'], $container);
+        }
     }
 
     protected function configureAddress(array $config, ContainerBuilder $container)
@@ -43,6 +47,22 @@ class VespolinaCheckoutExtension extends Extension
             }
             if (isset($formConfig['data_class'])) {
                 $container->setParameter('vespolina.address.form.model.data_class.class', $formConfig['data_class']);
+            }
+        }
+    }
+
+    protected function configureCreditCard(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['form'])) {
+            $formConfig = $config['form'];
+            if (isset($formConfig['type'])) {
+                $container->setParameter('vespolina.creditcard.form.type.class', $formConfig['type']);
+            }
+            if (isset($formConfig['name'])) {
+                $container->setParameter('vespolina.creditcard.form.name', $formConfig['name']);
+            }
+            if (isset($formConfig['data_class'])) {
+                $container->setParameter('vespolina.creditcard.form.model.data_class.class', $formConfig['data_class']);
             }
         }
     }

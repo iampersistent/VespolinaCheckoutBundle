@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
             ->end();
 */
         $this->addAddressSection($rootNode);
+        $this->addCreditCardSection($rootNode);
 
         return $treeBuilder;
     }
@@ -49,6 +50,26 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('name')->end()
                                 ->scalarNode('data_class')->end()
                             ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function addCreditCardection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('credit_card')
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->scalarNode('type')->end()
+                                    ->scalarNode('name')->end()
+                                    ->scalarNode('data_class')->end()
+                                ->end()
                         ->end()
                     ->end()
                 ->end()
