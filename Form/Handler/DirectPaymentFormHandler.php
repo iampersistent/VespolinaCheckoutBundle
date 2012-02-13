@@ -25,49 +25,35 @@ class DirectPaymentFormHandler
         $this->request = $request;
     }
 
-    public function process($parameters)
+    public function process($creditCard)
     {
-        $directPayment = new DirectPayment();
-        $this->form->setData($directPayment);
+        $this->form->setData($creditCard);
 
         if ('POST' == $this->request->getMethod()) {
             $this->form->bindRequest($this->request);
-
             if ($this->form->isValid()) {
-
-                // when the binding is working this can be called in $directPayment
-                $params = $this->request->request->get($parameters);
+                // this is hackie as fuck, but I'm tired of dealing the goddamn form right now
+                $params = $this->request->request->get('vespolina_secure');
                 $address = $params['address'];
-                $address['street'] = $address['street2'] ? $address['street1'].' '.$address['street2'] : $address['street1'];
-                $params['address'] = $address;
-                $data = $this->mapData($directPayment::$mapping, $params);
-                $exp = $data['EXPDATE'];
-                $data['EXPDATE'] = sprintf('%02d%d', $exp['month'], $exp['year']);
+                $creditCard->setStreet1($address['street1']);
+                $creditCard->setStreet2($address['street2']);
+                $creditCard->setCity($address['city']);
+                $creditCard->setState($address['state']);
+                $creditCard->setCountry($address['country']);
+                $creditCard->setPostCode($address['postalCode']);
 
-                $extendedData = new ExtendedData();
-                $extendedData->set('checkout_params', $data);
+                $cc = $params['creditCard'];
+                $creditCard->setCardNumber($cc['cardNumber']);
+                $creditCard->setCvv($cc['cvv']);
+                $creditCard->setExpiration($cc['expiration']['month'], $cc['expiration']['year']);
 
-                return $extendedData;
+                $creditCard->setFirstName($params['firstName']);
+                $creditCard->setLastName($params['lastName']);
+
+                return $creditCard;
             }
         }
+
         return null;
-    }
-
-    protected function mapData($mapping, $rawData)
-    {
-        $data = array();
-        foreach ($mapping as $property => $map) {
-            if (!isset($rawData[$property])) {
-                continue;
-            }
-            $value = $rawData[$property];
-
-            if (is_array($map)) {
-                $data = array_merge($data, $this->mapData($map, $value));
-            } else {
-                $data[$map] = $value;
-            }
-        }
-        return $data;
     }
 }

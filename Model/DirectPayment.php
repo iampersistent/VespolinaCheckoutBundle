@@ -1,35 +1,16 @@
 <?php
-
 namespace Vespolina\CheckoutBundle\Model;
+
+use JMS\Payment\CoreBundle\Document\CreditCardProfile;
+
 /**
  * @author Richard Shank <develop@zestic.com>
  */
 
-class DirectPayment
+class DirectPayment extends CreditCardProfile
 {
     protected $address;
-    protected $firstName;
-    protected $middle;
-    protected $lastName;
     protected $creditCard;
-
-    public static $mapping = array(
-        'address' => array(
-            'street' => 'STREET',
-            'city' => 'CITY',
-            'state' => 'STATE',
-            'postalCode' => 'ZIP',
-            'country' => 'COUNTRYCODE',
-        ),
-        'creditCard' => array(
-            'carType' => 'CREDITCARETYPE',
-            'cardNumber' => 'ACCT',
-            'expiration' => 'EXPDATE',
-            'cvv' => 'CVV2',
-        ),
-        'firstName' => 'FIRSTNAME',
-        'lastName' => 'LASTNAME',
-    );
 
     public function setAddress($address)
     {
@@ -41,62 +22,17 @@ class DirectPayment
         return $this->address;
     }
 
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-    }
-
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-    }
-
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    public function setMiddle($middle)
-    {
-        $this->middle = $middle;
-    }
-
-    public function getMiddle()
-    {
-        return $this->middle;
-    }
-
     public function setCreditCard($creditCard)
     {
         $this->creditCard = $creditCard;
+        $this->setCardNumber($creditCard->getCardNumber());
+        $this->setCardType($creditCard->getCardType());
+        $this->setCvv($creditCard->getCvv());
+        $this->setExpiration($creditCard->getExpiration()->getMonth(), $creditCard->getExpiration()->getYear());
     }
 
     public function getCreditCard()
     {
         return $this->creditCard;
-    }
-
-    public function getMappedData()
-    {
-        return $this->mapData(self::$mapping, $this);
-    }
-
-    protected function mapData($mapping, $object)
-    {
-        $data = array();
-        foreach ($mapping as $property => $map) {
-            $getter = 'get'.ucfirst($property);
-            if (is_array($map)) {
-                $data = array_merge($data, $this->mapData($map, $object->$getter()));
-            } else {
-                $data[$map] = $object->$getter();
-            }
-        }
-        return $data;
     }
 }
