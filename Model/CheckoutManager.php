@@ -11,7 +11,7 @@ namespace Vespolina\CheckoutBundle\Model;
 use JMS\Payment\CoreBundle\Plugin\PluginInterface;
 use Vespolina\CartBundle\Model\CartInterface;
 use Vespolina\CartBundle\Model\CartManagerInterface;
-use Vespolina\CheckoutBundle\Handler\CheckoutHandler;
+use Vespolina\CheckoutBundle\Handler\CheckoutHandlerInterface;
 use Vespolina\CheckoutBundle\Model\CheckoutManagerInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 
@@ -88,20 +88,22 @@ class CheckoutManager implements CheckoutManagerInterface
         foreach ($cart->getRecurringItems() as $cartItem) {
 
             $cartableItem = $cartItem->getCartableItem();
-            $handler = $this->handler[$cartableItem->getType()];
+            $handler = $this->getCheckoutHandler($cartableItem->getType());
 
-            $recurringInstructions = $handler->getRecurringInstructions($cartableItem); // todo: should this return a different class than RecurringTransactionInterface?
+            $recurringInstructions = $cartItem->getPaymentInstruction();
+            $recurringInstructions->setCreditCardProfile($this->getCreditCard());
 
             try {
-                $response = $this->processor->initializeRecurring($recurringInstructions, 123);
+                $recurringTransaction = $this->getPaymentProcessor()->initializeRecurring($recurringInstructions, 123);
             } catch (\Exception $e) {
                 // todo: clean up in handler
+                throw new \Exception($e->getMessage());
             }
-            $handler->processorSuccess($cartableItem, $recurringInstructions, $response);
+            $handler->processorSuccess($cartableItem, $recurringTransaction);
 
             // todo: refactor!
             if ($cartableItem->getDiscount()) {
-                $this->updateRecurringAmountOnProducts($cart->getOwner()->getSpreads()); // move out so it only happens once
+//                $this->updateRecurringAmountOnProducts($cart->getOwner()->getSpreads()); // move out so it only happens once
             }
 
             $cartableItem->setRecur($recurringInstructions);
