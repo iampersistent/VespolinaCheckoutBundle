@@ -11,7 +11,7 @@ namespace Vespolina\CheckoutBundle\Model;
 use JMS\Payment\CoreBundle\Plugin\PluginInterface;
 use Vespolina\CartBundle\Model\CartInterface;
 use Vespolina\CartBundle\Model\CartManagerInterface;
-use Vespolina\CheckoutBundle\Handler\CheckoutHandler;
+use Vespolina\CheckoutBundle\Handler\CheckoutHandlerInterface;
 use Vespolina\CheckoutBundle\Model\CheckoutManagerInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 
