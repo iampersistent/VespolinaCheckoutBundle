@@ -31,6 +31,11 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
             ->end();
 */
+        $rootNode
+            ->children()
+                ->scalarNode('default_processor')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
+            ->end();
+
         $this->addAddressSection($rootNode);
         $this->addCreditCardSection($rootNode);
 

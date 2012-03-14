@@ -30,6 +30,7 @@ class VespolinaCheckoutExtension extends Extension
         $loader->load(sprintf('checkout.xml'));
         $loader->load(sprintf('form.xml'));
 
+        $container->setAlias('vespolina.default.processor.plugin', $config['default_processor']);
         if (isset($config['address'])) {
             $this->configureAddress($config['address'], $container);
         }
