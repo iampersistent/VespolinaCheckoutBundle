@@ -5,12 +5,16 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="vespolina.cart.checkout_manager.class">Vespolina\CartBundle\Model\CheckoutManager</parameter>
+        <parameter key="vespolina.cart.checkout_manager.class">Vespolina\CheckoutBundle\Model\CheckoutManager</parameter>
         <parameter key="vespolina.checkout.template_engine">twig</parameter>
         <parameter key="vespolina.default.processor.plugin"></parameter>
     </parameters>
     <services>
-        <service id="vespolina.checkout_manager" class="%vespolina.cart.checkout_manager.class%" />
+        <service id="vespolina.checkout_manager" class="%vespolina.cart.checkout_manager.class%">
+            <argument type="service" id="vespolina.default.processor.plugin" />
+            <argument type="service" id="vespolina.cart.cart_manager" />
+            <argument type="service" id="vespolina.product.product_manager" />
+        </service>
         <service id="vespolina.checkout_cart_manager" alias="vespolina.cart.cart_manager" />
         <service id="vespolina.payment.processing" alias="vespolina.default.processor.plugin"/>
     </services>
