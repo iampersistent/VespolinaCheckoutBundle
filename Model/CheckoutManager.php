@@ -106,9 +106,9 @@ class CheckoutManager implements CheckoutManagerInterface
 //                $this->updateRecurringAmountOnProducts($cart->getOwner()->getSpreads()); // move out so it only happens once
             }
 
-            $cartableItem->setRecur($recurringInstructions);
+            $cartableItem->setRecur($recurringTransaction);
             $cartableItem->setProcessing(false); // doesn't belong here
-            $this->productManager->update($cartableItem);
+            $this->productManager->updateProduct($cartableItem);
         }
 
 
