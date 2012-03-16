@@ -94,7 +94,7 @@ class CheckoutManager implements CheckoutManagerInterface
             $recurringInstructions->setCreditCardProfile($this->getCreditCard());
 
             try {
-                $recurringTransaction = $this->getPaymentProcessor()->initializeRecurring($recurringInstructions, 123);
+                $recurringTransaction = $handler->initializeCharge($cartableItem);
             } catch (\Exception $e) {
                 // todo: clean up in handler
                 throw new \Exception($e->getMessage());
