@@ -95,7 +95,7 @@ class CheckoutManager implements CheckoutManagerInterface
             $recurringInstructions->setCreditCardProfile($this->getCreditCard());
 
             try {
-                $recurringTransaction = $handler->initializeCharge($cartableItem);
+                $recurringTransaction = $handler->initializeCharge($recurringInstructions);
             } catch (\Exception $e) {
                 // todo: clean up in handler
                 throw new \Exception($e->getMessage());
@@ -107,11 +107,10 @@ class CheckoutManager implements CheckoutManagerInterface
 //                $this->updateRecurringAmountOnProducts($cart->getOwner()->getSpreads()); // move out so it only happens once
             }
 
-            $cartableItem->setRecur($recurringTransaction);
+            $cartableItem->addPaymentTransaction($recurringTransaction);
             $cartableItem->setProcessing(false); // doesn't belong here
             $this->productManager->updateProduct($cartableItem);
         }
-
 
         if (false == true && $cart->getNonRecurringItems()->count()) {
             // process rest of cart
