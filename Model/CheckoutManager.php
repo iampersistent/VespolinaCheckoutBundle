@@ -39,9 +39,10 @@ class CheckoutManager implements CheckoutManagerInterface
      */
     public function addCheckoutHandler(CheckoutHandlerInterface $handler)
     {
-        $type = $handler->getType();
-        $this->checkoutHandlers[$type] = $handler;
-
+        $types = (array)$handler->getTypes();
+        foreach ($types as $type) {
+            $this->checkoutHandlers[$type] = $handler;
+        }
         $rp = new \ReflectionProperty($handler, 'checkoutManager');
         $rp->setAccessible(true);
         $rp->setValue($handler, $this);
