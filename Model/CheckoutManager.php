@@ -39,9 +39,10 @@ class CheckoutManager implements CheckoutManagerInterface
      */
     public function addCheckoutHandler(CheckoutHandlerInterface $handler)
     {
-        $type = $handler->getType();
-        $this->checkoutHandlers[$type] = $handler;
-
+        $types = (array)$handler->getTypes();
+        foreach ($types as $type) {
+            $this->checkoutHandlers[$type] = $handler;
+        }
         $rp = new \ReflectionProperty($handler, 'checkoutManager');
         $rp->setAccessible(true);
         $rp->setValue($handler, $this);
@@ -94,7 +95,7 @@ class CheckoutManager implements CheckoutManagerInterface
             $recurringInstructions->setCreditCardProfile($this->getCreditCard());
 
             try {
-                $recurringTransaction = $this->getPaymentProcessor()->initializeRecurring($recurringInstructions, 123);
+                $recurringTransaction = $handler->initializeCharge($recurringInstructions);
             } catch (\Exception $e) {
                 // todo: clean up in handler
                 throw new \Exception($e->getMessage());
@@ -106,11 +107,10 @@ class CheckoutManager implements CheckoutManagerInterface
 //                $this->updateRecurringAmountOnProducts($cart->getOwner()->getSpreads()); // move out so it only happens once
             }
 
-            $cartableItem->setRecur($recurringTransaction);
+            $cartableItem->addPaymentTransaction($recurringTransaction);
             $cartableItem->setProcessing(false); // doesn't belong here
             $this->productManager->updateProduct($cartableItem);
         }
-
 
         if (false == true && $cart->getNonRecurringItems()->count()) {
             // process rest of cart
