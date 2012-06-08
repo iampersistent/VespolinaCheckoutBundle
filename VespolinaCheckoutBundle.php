@@ -21,7 +21,7 @@ class VespolinaCheckoutBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        $container->addCompilerPass(new FormPass());
-        $container->addCompilerPass(new CheckoutHandlerFactoryPass());
+        //$container->addCompilerPass(new FormPass());
+        //$container->addCompilerPass(new CheckoutHandlerFactoryPass());
     }
 }

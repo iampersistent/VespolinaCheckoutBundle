@@ -25,19 +25,11 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('vespolina_checkout');
-/*
-        $rootNode
-            ->children()
-                ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
-            ->end();
-*/
-        $rootNode
-            ->children()
-                ->scalarNode('default_processor')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
-            ->end();
 
-        $this->addAddressSection($rootNode);
-        $this->addCreditCardSection($rootNode);
+        $rootNode
+            ->children()
+            ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
+            ->end();
 
         return $treeBuilder;
     }

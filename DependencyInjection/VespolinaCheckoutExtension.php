@@ -27,10 +27,13 @@ class VespolinaCheckoutExtension extends Extension
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        $loader->load(sprintf('checkout.xml'));
-        $loader->load(sprintf('form.xml'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        $container->setAlias('vespolina.default.processor.plugin', $config['default_processor']);
+        if (!in_array(strtolower($config['db_driver']), array('mongodb', 'orm'))) {
+            throw new \InvalidArgumentException(sprintf('Invalid db driver "%s".', $config['db_driver']));
+        }
+        $loader->load(sprintf('%s.xml', $config['db_driver']));
+
         if (isset($config['address'])) {
             $this->configureAddress($config['address'], $container);
         }
