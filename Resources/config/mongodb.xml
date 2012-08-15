@@ -9,7 +9,7 @@
     </parameters>
     <services>
         <service id="vespolina.process_manager" class="%vespolina.process_manager.class%">
-            <argument type="service" id="doctrine.odm.mongodb.default_document_manager" />
+            <argument type="service" id="doctrine_mongodb.odm.default_document_manager" />
             <argument type="service" id="session" />
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
